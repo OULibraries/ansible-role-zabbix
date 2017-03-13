@@ -24,7 +24,7 @@
 
 - name: secrets to /opt/oulib/zabbix/etc
   template:
-    src: secrets.yml
+    src: secrets.yml.j2
     dest: /opt/oulib/zabbix/etc/
     mode: 0600
     owner: root
