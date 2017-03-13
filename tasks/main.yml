@@ -2,14 +2,14 @@
 # tasks file for OULibraries.zabbix
 
 - include: install.yml
-  sudo: yes
+  become: true
 
 - include: db.yml
-  sudo: yes
+  become: true
   tags:
     - database
 
 - include: assets.yml
-  sudo: yes
+  become: true
   tags:
     - assets
