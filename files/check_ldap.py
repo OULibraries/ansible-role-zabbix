@@ -5,7 +5,7 @@ import sys
 import re
 
 # Load settings
-with open("secrets.yml", 'r') as ymlfile:
+with open("/opt/oulib/zabbix/etc/secrets.yml", 'r') as ymlfile:
   secrets = yaml.load(ymlfile)
 
 if len(sys.argv) < 2:
