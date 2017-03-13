@@ -6,7 +6,7 @@
     state: directory
     mode: 0755
     owner: root
-    group: wheel
+    group: zabbix
     recurse: yes
   with_items:
     - /opt/oulib/zabbix/bin
@@ -18,7 +18,7 @@
     dest: /opt/oulib/zabbix/bin/
     mode: 0755
     owner: root
-    group: wheel
+    group: zabbix
   with_items:
     - check_ldap.py
 
@@ -26,9 +26,9 @@
   template:
     src: secrets.yml.j2
     dest: /opt/oulib/zabbix/etc/secrets.yml
-    mode: 0600
+    mode: 0640
     owner: root
-    group: root
+    group: zabbix
 
 - name : Configure Zabbix Server
   template: 
