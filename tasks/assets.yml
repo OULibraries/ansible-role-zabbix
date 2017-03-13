@@ -1,4 +1,35 @@
 ---
+
+- name: Ensure /opt/oulib/zabbix dirs exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: wheel
+    recurse: yes
+  with_items:
+    - /opt/oulib/zabbix/bin
+    - /opt/oulib/zabbix/etc
+
+- name: scripts to /opt/oulib/zabbix/bin
+  copy:
+    src: "{{ item }}"
+    dest: /opt/oulib/zabbix/bin/
+    mode: 0755
+    owner: root
+    group: wheel
+  with_items:
+    - check_ldap.py
+
+- name: secrets to /opt/oulib/zabbix/etc
+  template:
+    src: secrets.yml
+    dest: /opt/oulib/zabbix/etc/
+    mode: 0600
+    owner: root
+    group: root
+
 - name : Configure Zabbix Server
   template: 
     src: templates/zabbix_server.conf.j2

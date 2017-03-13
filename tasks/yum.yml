@@ -7,15 +7,21 @@
 - name: Zabbix server and web interface packages installed
   yum:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items:
     - zabbix-server-mysql
     - zabbix-web-mysql
 
+- name: Yum packages for external checks
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-ldap
+
 - name: Get installed Zabbix version
   shell: rpm -qi zabbix-server-mysql | awk 'BEGIN {FS=":"} ; /Version/{print $2}'| xargs
   register:  zabbix_version_cmd
-
 
 - name: Set zabbix_version 
   set_fact:

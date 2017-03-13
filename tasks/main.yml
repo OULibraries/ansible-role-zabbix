@@ -1,15 +1,17 @@
 ---
 # tasks file for OULibraries.zabbix
 
-- include: install.yml
+- include: yum.yml
   become: true
+  tags:
+    - zabbix_yum
 
 - include: db.yml
   become: true
   tags:
-    - database
+    - zabbix_database
 
 - include: assets.yml
   become: true
   tags:
-    - assets
+    - zabbix_assets
