@@ -6,12 +6,18 @@ import yaml
 import sys
 import re
 
+# Assume the worst
+status = 1
+
+target_matches = 0
+
 # Load settings
 with open("/opt/oulib/zabbix/etc/check_ldap.yml", 'r') as ymlfile:
   secrets = yaml.load(ymlfile)
 
 if len(sys.argv) < 2:
-    print 'Must supply ldap target!'
+    #print 'Must supply ldap target!'
+    print str(status)
     sys.exit(1)
   
 ldap_target = sys.argv[1]
@@ -22,6 +28,9 @@ for secret in secrets['zabbix_check_ldap']:
   # Skip to the next ldap if this isn't the requested one
   if ldap_target != secret['target']:
     continue
+
+  # Count a match
+  target_matches += 1
 
   # Collect details needed for bind
   l = ldap.initialize(secret['target'])
@@ -45,7 +54,7 @@ for secret in secrets['zabbix_check_ldap']:
   
       account_name = l.whoami_s()
   
-      print 'Successfully bound as %s' % account_name
+      #print 'Successfully bound as %s' % account_name
   
   # Search AD for username
   
@@ -60,13 +69,15 @@ for secret in secrets['zabbix_check_ldap']:
       user_dn = re.search('^\[\(\'(.+?)\',\s', search_result)
   
       if user_dn:
-          print 'Account name %s found:' % search_account
+          #print 'Account name %s found:' % search_account
+          pass
   
       else:
-          print 'Account name %s not found.' % search_account
+          #print 'Account name %s not found.' % search_account
+          print str(status)
           sys.exit(1)
   
-      print user_dn.group(1)
+      #print user_dn.group(1)
   
   # Authenticate using search results
   
@@ -77,26 +88,38 @@ for secret in secrets['zabbix_check_ldap']:
   
       new_name = l.whoami_s()
   
-      print 'Successfully bound as %s' % new_name
+      #print 'Successfully bound as %s' % new_name
   
   # If all else fails, abaondon ship
   
   except ldap.INVALID_CREDENTIALS:
-      print "Your username or password is incorrect."
+      #print "Your username or password is incorrect."
+      print str(status)
       sys.exit(1)
   
   except ldap.SERVER_DOWN:
-      print"The server appears to be down."
+      #print"The server appears to be down."
+      print str(status)
       sys.exit(1)
   
   except ldap.LDAPError, e:
       if type(e.message) == dict and e.message.has_key('desc'):
-          print e.message['desc']
+          #print e.message['desc']
+          print str(status)
           sys.exit(1)
       else: 
-          print e
+          #print e
+          print str(status)
           sys.exit(1)
   
-  sys.exit(0)
-  
   l.unbind_s()
+  
+  # Everything is fine
+  status = 0
+  print str(status)
+  sys.exit(0)
+
+# If the requested ldap isn't in the list of targets, we have a problem.
+if target_matches == 0:
+  print str(status)
+  sys.exit(1)
