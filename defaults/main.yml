@@ -15,3 +15,7 @@ zabbix_tz: "America/Chicago"
 
 # TLD to use with zabbix, prepended to base dn from Apache role
 zabbix_hostname: 'monitor'
+
+# Specifies how long we wait for agent, SNMP device or external check (in seconds).
+# Zabbix default is 3, but we set to 30 because of external checks.
+zabbix_timeout: 30
