@@ -14,8 +14,10 @@
   service:
     name: zabbix-server
     state: restarted
+    become: yes
 
 - name: Restart Zabbix web
   service:
     name: httpd
     state: restarted
+    become: yes
