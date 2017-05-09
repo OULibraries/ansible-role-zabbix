@@ -42,3 +42,7 @@ zabbix_tz: "America/Chicago"
 zabbix_hostname: 'monitor'
 
 ```
+License
+-------
+
+[MIT](https://github.com/OULibraries/ansible-role-zabbix/blob/master/LICENSE)
