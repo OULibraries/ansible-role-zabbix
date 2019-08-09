@@ -32,3 +32,15 @@
     - zabbix_setrlimit.te
     - zabbix_setrlimit.mod
     - zabbix_setrlimit.pp
+
+- name: Set httpd_can_connect_zabbix flag on and keep it persistent across reboots
+  seboolean:
+    name: httpd_can_connect_zabbix
+    state: yes
+    persistent: yes
+
+- name: Set httpd_can_network_connect_db flag on and keep it persistent across reboots
+  seboolean:
+    name: httpd_can_network_connect_db
+    state: yes
+    persistent: yes
