@@ -19,10 +19,3 @@
   with_items:
     - python-ldap
 
-- name: Get installed Zabbix version
-  shell: rpm -qi zabbix-server-mysql | awk 'BEGIN {FS=":"} ; /Version/{print $2}'| xargs
-  register:  zabbix_version_cmd
-
-- name: Set zabbix_version 
-  set_fact:
-    zabbix_version: "{{ zabbix_version_cmd.stdout }}"
