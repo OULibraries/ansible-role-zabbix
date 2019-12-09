@@ -24,6 +24,32 @@
   command: >
     semodule -i /tmp/zabbix_setrlimit.pp
 
+- name: Copy SELinux type enforcement
+  copy:
+    src: zabbix_socket.te
+    dest: /tmp/
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Remove SELinux policy package
+  command: >
+    semodule -r zabbix_socket
+  failed_when: false
+
+- name: Compile SELinux module file
+  command: >
+    checkmodule -M -m -o /tmp/zabbix_socket.mod /tmp/zabbix_socket.te
+
+- name: Build SELinux policy package
+  command: >
+    semodule_package -o /tmp/zabbix_socket.pp -m /tmp/zabbix_socket.mod
+
+- name: Install local selinux policy package for zabbix agent.
+  command: >
+    semodule -i /tmp/zabbix_socket.pp
+
+
 - name: Remove temporary files
   file:
     path: "/tmp/{{ item }}"
@@ -32,6 +58,9 @@
     - zabbix_setrlimit.te
     - zabbix_setrlimit.mod
     - zabbix_setrlimit.pp
+    - zabbix_socket.te
+    - zabbix_socket.mod
+    - zabbix_socket.pp
 
 - name: Set httpd_can_connect_zabbix flag on and keep it persistent across reboots
   seboolean:
