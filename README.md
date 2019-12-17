@@ -2,7 +2,7 @@ OU Libraries Zabbix
 =========
 
 Rudimentary Zabbix zerver role for CentOS 7.
-See the [Zabbix 3.0 documentation](https://www.zabbix.com/documentation/3.0/manual).
+See the [Zabbix 4.0 documentation](https://www.zabbix.com/documentation/4.0/manual).
 
 Requirements
 ------------
