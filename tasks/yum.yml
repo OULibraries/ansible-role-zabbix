@@ -1,13 +1,13 @@
 ---
 - name: Zabbix official repository configured
   yum:
-    name: http://repo.zabbix.com/zabbix/3.0/rhel/7/x86_64/zabbix-release-3.0-1.el7.noarch.rpm
+    name: https://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-2.el7.noarch.rpm 
     state: present
 
 - name: Zabbix server and web interface packages installed
   yum:
     name: "{{ item }}"
-    state: present
+    state: latest
   with_items:
     - zabbix-server-mysql
     - zabbix-web-mysql
@@ -19,10 +19,3 @@
   with_items:
     - python-ldap
 
-- name: Get installed Zabbix version
-  shell: rpm -qi zabbix-server-mysql | awk 'BEGIN {FS=":"} ; /Version/{print $2}'| xargs
-  register:  zabbix_version_cmd
-
-- name: Set zabbix_version 
-  set_fact:
-    zabbix_version: "{{ zabbix_version_cmd.stdout }}"
